@@ -33,7 +33,47 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving users] - [index - GET]: ${error.message}`
+        `[Error retrieving user ${id}] - [index - GET]: ${error.message}`
+      )
+      next(httpError);
+    }
+  }),
+  post: catchAsync(async (req, res, next) => {
+    try {
+      const { firstName, lastName, email, password } = req.body;
+      const response = await User.create({
+        firstName,
+        lastName,
+        email,
+        password
+      })
+      endpointResponse({
+        res,
+        message: `User posted successfully`,
+        body: response
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error creating user] - [index - POST]: ${error.message}`
+      )
+      next(httpError);
+    }
+  }),
+  put: catchAsync(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const user = req.body;
+      const response = await User.findByPk(id).update(user);
+      endpointResponse({
+        res,
+        message: `User ${id} updated successfully`,
+        body: response
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error updating user] - [index - PUT]: ${error.message}`
       )
       next(httpError);
     }

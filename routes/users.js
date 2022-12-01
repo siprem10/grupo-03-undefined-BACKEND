@@ -1,12 +1,12 @@
-const express = require('express')
-const {
-   getAll,
-   getById
-} = require('../controllers/users')
+const express = require('express');
+const { getAll, getById, post, put } = require('../controllers/users');
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', getAll)
-router.get('/:id', getById)
+router.get('/', getAll);
+router.get('/:id', getById);
+router.post('/', post);
+router.put('/:id', put);
+router.delete();
 
-module.exports = router
+module.exports = router;
