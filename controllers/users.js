@@ -2,6 +2,7 @@ const createHttpError = require('http-errors');
 const { User } = require('../database/models');
 const { endpointResponse } = require('../helpers/success');
 const { catchAsync } = require('../helpers/catchAsync');
+const bcrypt = require('bcrypt');
 
 module.exports = {
   getAll: catchAsync(async (req, res, next) => {
@@ -40,11 +41,27 @@ module.exports = {
   createUser: catchAsync(async (req, res, next) => {
     try {
       const { firstName, lastName, email, password } = req.body;
+      let hashedPassword = await bcrypt.hash(password, 10);
+
+      const user = await User.findOne({
+        where: {
+          email: email
+        }
+      })
+
+      if (user) {
+        const httpError = createHttpError(
+          200,
+          `[Error ya esta este mail] - [index - POST]: 200`
+        )
+        next(httpError);
+      }
+
       const response = await User.create({
         firstName,
         lastName,
         email,
-        password
+        password: hashedPassword
       })
       endpointResponse({
         res,
