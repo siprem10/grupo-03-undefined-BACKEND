@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 
 module.exports = {
   development: {
@@ -8,6 +8,11 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
+
+    timestamps: true,
+    underscored: false,
+    seederStorage: 'json',
+    seederStoragePath: 'database/seeders/json',
   },
 
   production: {
@@ -18,4 +23,4 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: 'mysql',
   },
-}
+};
