@@ -11,18 +11,17 @@ module.exports = (sequelize, DataTypes) => {
   // Model definition
   Transaction.init(
     {
-      id: DataTypes.INTEGER,
       description: DataTypes.STRING,
       amount: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
       categoryId: DataTypes.INTEGER,
       date: DataTypes.DATE,
-      deletedAt: DataTypes.STRING
+      deletedAt: DataTypes.STRING,
     },
     {
       sequelize,
       timestamps: true,
-      modelName: 'Transaction'
+      modelName: 'Transaction',
     }
   );
   return Transaction;
