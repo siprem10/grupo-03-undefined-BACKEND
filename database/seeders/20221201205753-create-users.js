@@ -91,7 +91,7 @@ module.exports = {
         password: faker.internet.password(),
         email: faker.internet.email(),
         avatar: faker.image.avatar(),
-        roleId: 2,
+        roleId: 3,
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
       };
