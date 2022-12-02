@@ -3,15 +3,20 @@ const { faker } = require('@faker-js/faker');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    let user = await queryInterface.rawSelect('Users', {}, ['id']);
+
+    if (!user) {
+      user = 1;
+    }
+
     const transactions = [];
 
     // Create 20 transactions
     for (let i = 0; i < 20; i++) {
       transactions.push({
-        id: faker.datatype.number({ max: 100 }),
         description: faker.finance.transactionDescription(),
         amount: faker.finance.amount(),
-        userId: faker.datatype.number({ min: 1, max: 3 }),
+        userId: faker.datatype.number({ min: user, max: user + 18 }),
         categoryId: 1,
         date: faker.date.past(),
         createdAt: faker.date.past(),
