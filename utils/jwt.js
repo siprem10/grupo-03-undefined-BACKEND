@@ -26,3 +26,8 @@ const decodeToken = (token) => {
     throw new Error({error: "Error to decode token!"});
   }
 }
+
+module.exports = {
+  signToken,
+  decodeToken
+}
