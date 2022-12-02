@@ -1,5 +1,6 @@
 'use strict';
 const { faker } = require('@faker-js/faker');
+const { hash } = require('bcrypt');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -8,7 +9,7 @@ module.exports = {
         firstName: 'Alberto',
         lastName: 'Gomez',
         email: 'gomez.juan.12@gmail.com',
-        password: 'alberto123',
+        password: await hash('alberto123', 10),
         avatar: faker.image.avatar(),
         roleId: 1,
         createdAt: faker.date.past(),
@@ -18,7 +19,7 @@ module.exports = {
         firstName: 'Luciano',
         lastName: 'Piñol',
         email: 'luchemma@gmail.com',
-        password: 'luciano123',
+        password: await hash('luciano123', 10),
         avatar: faker.image.avatar(),
         roleId: 1,
         createdAt: faker.date.past(),
@@ -28,7 +29,7 @@ module.exports = {
         firstName: 'Ramiro',
         lastName: 'Dominguez',
         email: 'ramidomgz@gmail.com',
-        password: 'ramiro123',
+        password: await hash('ramiro123', 10),
         avatar: faker.image.avatar(),
         roleId: 1,
         createdAt: faker.date.past(),
@@ -38,7 +39,7 @@ module.exports = {
         firstName: 'Franco',
         lastName: `D'Angelo`,
         email: 'ffrancodangelo@gmail.com',
-        password: 'franco123',
+        password: await hash('franco123', 10),
         avatar: faker.image.avatar(),
         roleId: 1,
         createdAt: faker.date.past(),
@@ -48,7 +49,7 @@ module.exports = {
         firstName: 'Alejandro',
         lastName: 'Gonzalez',
         email: 'alegb91@gmail.com',
-        password: 'alejandro123',
+        password: await hash('alejandro123', 10),
         avatar: faker.image.avatar(),
         roleId: 1,
         createdAt: faker.date.past(),
@@ -58,7 +59,7 @@ module.exports = {
         firstName: 'Joaquin',
         lastName: 'Franco',
         email: 'joafran0016@gmail.com',
-        password: 'joaquin123',
+        password: await hash('joaquin123', 10),
         avatar: faker.image.avatar(),
         roleId: 1,
         createdAt: faker.date.past(),
@@ -72,7 +73,7 @@ module.exports = {
       const newStandardUser = {
         firstName: nameUser,
         lastName: faker.name.lastName(),
-        password: `${nameUser}123`.toLowerCase(),
+        password: await hash(`${nameUser}123`.toLowerCase(), 10),
         email: faker.internet.email(),
         avatar: faker.image.avatar(),
         roleId: 1,
@@ -88,7 +89,7 @@ module.exports = {
       const newRegularUser = {
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
-        password: faker.internet.password(),
+        password: await hash(faker.internet.password(), 10),
         email: faker.internet.email(),
         avatar: faker.image.avatar(),
         roleId: 3,
