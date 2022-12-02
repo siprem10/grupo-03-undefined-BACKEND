@@ -1,8 +1,9 @@
 const createHttpError = require('http-errors');
-const { User } = require('../database/models');
 const { catchAsync } = require('../helpers/catchAsync');
+const { endpointResponse } = require('../helpers/success');
 const { isValidPassword } = require('../utils/password');
-const { signToken } = require('../utils/jwt');
+const { signToken, decodeToken } = require('../utils/jwt');
+const { getByEmail } = require('../repositories/users');
 
 module.exports = {
   login: catchAsync(async (req, res, next) => {
@@ -14,7 +15,7 @@ module.exports = {
         throw new Error("Missing credentials!");
       }
 
-      const user = await User.findOne({ where: { email: email } });
+      const user = await getByEmail(email);
 
       if(!user){
         throw new Error("User not found!");
@@ -36,9 +37,34 @@ module.exports = {
       user.password = undefined;
   
       return res.header("auth-token", token).json({
-        user: user,
         token: token,
       });   
+      
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving users] - [index - POST]: ${error.message}`
+      )
+      next(httpError);
+    }
+  }),
+  me: catchAsync(async (req, res, next) => {
+    try {
+
+      const tokenHeader = req.headers["auth-token"];
+      const tokenDecode = decodeToken(tokenHeader);    
+      const user = await getByEmail(tokenDecode.email);
+
+      if(!user){
+        throw new Error("User not found!");
+      }
+      user.password = undefined;
+      
+      return endpointResponse({
+        res,
+        message: 'User find successfully',
+        body: user
+      })
       
     } catch (error) {
       const httpError = createHttpError(
