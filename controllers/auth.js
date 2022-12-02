@@ -1,6 +1,5 @@
 const createHttpError = require('http-errors');
 const { User } = require('../database/models');
-const { endpointResponse } = require('../helpers/success');
 const { catchAsync } = require('../helpers/catchAsync');
 const { isValidPassword } = require('../utils/password');
 const { signToken } = require('../utils/jwt');
