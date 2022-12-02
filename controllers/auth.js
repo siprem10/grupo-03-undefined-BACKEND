@@ -9,6 +9,11 @@ module.exports = {
     try {
 
       const {email, password} = req.body;
+
+      if(!email || !password){
+        throw new Error("Missing credentials!");
+      }
+
       const user = await User.findOne({ where: { email: email } });
 
       if(!user){
