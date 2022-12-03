@@ -1,0 +1,6 @@
+[
+  "20220801011947-create-roles.js",
+  "20220901205753-create-users.js",
+  "20221001195501-create-categories.js",
+  "20221201010303-create-transactitons.js"
+]
