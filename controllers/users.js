@@ -43,20 +43,6 @@ module.exports = {
       const { firstName, lastName, email, password } = req.body;
       let hashedPassword = await bcrypt.hash(password, 10);
 
-      const user = await User.findOne({
-        where: {
-          email: email
-        }
-      })
-
-      if (user) {
-        const httpError = createHttpError(
-          200,
-          `[Error ya esta este mail] - [index - POST]: 200`
-        )
-        next(httpError);
-      }
-
       const response = await User.create({
         firstName,
         lastName,
