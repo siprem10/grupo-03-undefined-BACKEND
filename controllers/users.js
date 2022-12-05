@@ -7,11 +7,12 @@ const bcrypt = require('bcrypt');
 module.exports = {
   getAll: catchAsync(async (req, res, next) => {
     try {
-      const response = await User.findAll();
+      const response = await User.findAll({attributes: {exclude: ['password']}});
+
       endpointResponse({
         res,
         message: 'Users retrieved successfully',
-        body: response
+        body: [response]
       })
     } catch (error) {
       const httpError = createHttpError(
@@ -24,7 +25,7 @@ module.exports = {
   getById: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = await User.findByPk(id);
+      const response = await User.findByPk(id, {attributes: {exclude: ['password']}});
       endpointResponse({
         res,
         message: `User ${id} retrieved successfully`,
