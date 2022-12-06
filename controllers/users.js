@@ -11,13 +11,13 @@ module.exports = {
       endpointResponse({
         res,
         message: 'Users retrieved successfully',
-        body: response
-      })
+        body: response,
+      });
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
         `[Error retrieving users] - [index - GET]: ${error.message}`
-      )
+      );
       next(httpError);
     }
   }),
@@ -28,13 +28,13 @@ module.exports = {
       endpointResponse({
         res,
         message: `User ${id} retrieved successfully`,
-        body: response
-      })
+        body: response,
+      });
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
         `[Error retrieving user ${id}] - [index - GET]: ${error.message}`
-      )
+      );
       next(httpError);
     }
   }),
@@ -47,36 +47,44 @@ module.exports = {
         firstName,
         lastName,
         email,
-        password: hashedPassword
-      })
+        password: hashedPassword,
+      });
       endpointResponse({
         res,
         message: `User posted successfully`,
-        body: response
-      })
+        body: response,
+      });
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
         `[Error creating user] - [index - POST]: ${error.message}`
-      )
+      );
       next(httpError);
     }
   }),
   updateUser: catchAsync(async (req, res, next) => {
+    const url = req.protocol + '://' + req.get('host');
     try {
+      const { firstName, lastName, email } = req.body;
       const { id } = req.params;
-      const user = req.body;
+      const user = {
+        firstName,
+        lastName,
+        email,
+        avatar: `${url}/assets/avatars/${req.file.filename}` || null,
+      };
+
       const response = await User.findByPk(id).update(user);
       endpointResponse({
         res,
         message: `User ${id} updated successfully`,
-        body: response
-      })
+        body: response,
+      });
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
         `[Error updating user] - [index - PUT]: ${error.message}`
-      )
+      );
       next(httpError);
     }
   }),
@@ -85,20 +93,20 @@ module.exports = {
       const { id } = req.params;
       const response = await User.destroy({
         where: {
-          id: id
-        }
-      })
+          id: id,
+        },
+      });
       endpointResponse({
         res,
         message: `User ${id} deleted successfully`,
-        body: response
-      })
+        body: response,
+      });
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
         `[Error deleting user] - [index - DELETE]: ${error.message}`
-      )
+      );
       next(httpError);
     }
-  })
-}
+  }),
+};
