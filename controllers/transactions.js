@@ -38,15 +38,15 @@ const getTransaction = async (req, res) => {
 };
 
 const createTransaction = async (req, res) => {
-  const { userId, categoryId, amount, date } = req.body;
-  if (!userId || !categoryId || !amount || !date) {
-    res
-      .status(400)
-      .json({ message: 'User, Category, Amount and Date must be provided' });
-  }
+  const token = req.header('auth-token');
+  const decodedToken = decodeToken(token);
+
+  const { description, categoryId, amount, date } = req.body;
+  
   try {
     const transaction = await Transaction.create({
-      userId,
+      userId: decodedToken.id,
+      description,
       categoryId,
       amount,
       date,
