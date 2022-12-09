@@ -18,11 +18,9 @@ const isAmount = body('amount')
   .isNumeric()
   .withMessage('amount must be a number');
 
-const isDate = body('date')
-  .notEmpty()
-  .withMessage('date required')
-  .isDate()
-  .withMessage('date must be a date');
+const isDate = body('date').notEmpty().withMessage('date required');
+// .isDate()
+// .withMessage('date must be a date');
 
 const postValidator = [isUserId, isCategoryId, isAmount, isDate];
 
