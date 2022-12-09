@@ -56,7 +56,6 @@ module.exports = {
       if(!user){
         throw new Error("User not found!");
       }
-      user.password = undefined;
       
       return endpointResponse({
         res,
