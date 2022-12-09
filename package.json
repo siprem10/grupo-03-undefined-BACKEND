@@ -12,7 +12,8 @@
   "scripts": {
     "dev": "nodemon app.js",
     "start": "node app.js",
-    "test": "mocha ./test/*.js"
+    "test": "mocha ./test/*.js",
+    "test:jest": "jest --forceExit --detectOpenHandles  --watchAll ./test/*.js"
   },
   "engines": {
     "node": ">=0.14"
