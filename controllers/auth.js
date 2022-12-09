@@ -11,10 +11,6 @@ module.exports = {
 
       const {email, password} = req.body;
 
-      if(!email || !password){
-        throw new Error("Missing credentials!");
-      }
-
       const user = await getByEmail(email);
 
       if(!user){
@@ -33,8 +29,6 @@ module.exports = {
         email: user.email,
         id: user.id,
       });
-  
-      user.password = undefined;
   
       return res.header("auth-token", token).json({
         token: token,
@@ -58,7 +52,6 @@ module.exports = {
       if(!user){
         throw new Error("User not found!");
       }
-      user.password = undefined;
       
       return endpointResponse({
         res,
