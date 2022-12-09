@@ -34,8 +34,6 @@ module.exports = {
         id: user.id,
       });
   
-      user.password = undefined;
-  
       return res.header("auth-token", token).json({
         token: token,
       });   
