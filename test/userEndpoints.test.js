@@ -19,46 +19,33 @@ async function handleSuccessLogin() {
   return token;
 }
 
-//TODO: Funciones para reutilizar codigo para la validacion de Tokens (Ver como pasar metodo y ruta)
+async function testTokenNotSentOrInvalid(req) {
+  const response = await req;
+  expect(response.statusCode).toBe(401);
 
-// function testTokenNotSentOrInvalid (method, route) {
+  const responseWithInvalidToken = await req.set(
+    'auth-token',
+    'b2Kas1i239nKazBN2jkMzI12kLZ2j8JaazZ'
+  );
+  expect(responseWithInvalidToken.statusCode).toBe(401);
+}
 
-//   test('Should response with status 401 when the token is not sent or is invalid', async () => {
-//     const response = await request(app).get(route);
-//     expect(response.statusCode).toBe(401);
+async function testValidToken(req) {
+  const token = await handleSuccessLogin();
 
-//     const responseWithInvalidToken = await request(app)
-//       .get('/users')
-//       .set('auth-token', 'b2Kas1i239nKazBN2jk');
-//     expect(responseWithInvalidToken.statusCode).toBe(401);
-//   });
-
-// }
-
-// async function testValidToken (route) {
-
-// }
+  const getUsersResponse = await req.set('auth-token', token);
+  expect(getUsersResponse.statusCode).toBe(200);
+}
 
 // ---------------------------------------------- TESTS ----------------------------------------------
 
 describe('GET /users', () => {
   test('Should response with status 401 when the token is not sent or is invalid', async () => {
-    const response = await request(app).get('/users');
-    expect(response.statusCode).toBe(401);
-
-    const responseWithInvalidToken = await request(app)
-      .get('/users')
-      .set('auth-token', 'b2Kas1i239nKazBN2jk');
-    expect(responseWithInvalidToken.statusCode).toBe(401);
+    testTokenNotSentOrInvalid(request(app).get('/users'));
   });
 
   test('Should response with status 200 when the valid token is sent', async () => {
-    const token = await handleSuccessLogin();
-
-    const getUsersResponse = await request(app)
-      .get('/users')
-      .set('auth-token', token);
-    expect(getUsersResponse.statusCode).toBe(200);
+    testValidToken(request(app).get('/users'));
   });
 
   test('Should send an array of users', async () => {
@@ -88,31 +75,19 @@ describe('GET /users', () => {
 describe('GET /users/:id', () => {
   test('Should response with status 401 when the token is not sent or is invalid', async () => {
     const minId = await queryInterface.rawSelect('Users', {}, ['id']);
-    const maxId = minId + 19;
 
-    const response = await request(app).get(`/users/${minId}`);
-    expect(response.statusCode).toBe(401);
-
-    const responseWithInvalidToken = await request(app)
-      .get(`/users/${maxId}`)
-      .set('auth-token', 'b2Kas1i239nKazBN2jk');
-    expect(responseWithInvalidToken.statusCode).toBe(401);
+    testTokenNotSentOrInvalid(request(app).get(`/users/${minId}`));
   });
 
   test('Should response with status 200 when the token is sent & UserId exists', async () => {
-    const token = await handleSuccessLogin();
     const minId = await queryInterface.rawSelect('Users', {}, ['id']);
 
-    const getUsersResponse = await request(app)
-      .get(`/users/${minId}`)
-      .set('auth-token', token);
-
-    expect(getUsersResponse.statusCode).toBe(200);
+    testValidToken(request(app).get(`/users/${minId}`));
   });
 
   test('Should the body contains null when the valid token is sent but the UserId doesnt exists', async () => {
     const token = await handleSuccessLogin();
-    const maxId = (await queryInterface.rawSelect('Users', {}, ['id'])) + 100;
+    const maxId = (await queryInterface.rawSelect('Users', {}, ['id'])) + 500;
 
     const getUsersResponse = await request(app)
       .get(`/users/${maxId + 1}`)
