@@ -143,3 +143,58 @@ describe('GET /users/:id', () => {
     );
   });
 });
+
+describe('POST /users', () => {
+  const validUser = {
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+  };
+
+  test('Should response with status 200 and the user created in body, when it has the complete and correct fields', async () => {
+    const response = await request(app).post('/users').send(validUser);
+    const { body } = response.body;
+
+    expect(response.statusCode).toBe(200);
+    expect(body).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        firstName: expect.any(String),
+        lastName: expect.any(String),
+        email: expect.any(String),
+      })
+    );
+  });
+
+  test('Should response with status 400 and the object with the errors, when some or all of the fields were not sent correctly or are left empty', async () => {
+    const userAllEmptyFields = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    };
+
+    const usersCases = [
+      {},
+      userAllEmptyFields,
+      { ...validUser, firstName: '' },
+      { ...validUser, lastName: '' },
+      { ...validUser, email: '' },
+      { ...validUser, password: '' },
+      { ...validUser, email: faker.internet.ip() },
+      { ...validUser, email: 'luchemma@gmail.com' },
+      { ...validUser, password: faker.internet.password(2) },
+    ];
+
+    for (let i = 0; i < usersCases.length; i++) {
+      const response = await request(app).post('/users').send(usersCases[i]);
+      const { body } = response;
+
+      expect(response.statusCode).toBe(400);
+      expect(body).toEqual(
+        expect.objectContaining({ error: expect.any(Object) })
+      );
+    }
+  });
+});
