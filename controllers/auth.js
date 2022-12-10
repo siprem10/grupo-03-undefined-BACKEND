@@ -37,7 +37,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving users] - [index - POST]: ${error.message}`
+        error.message
       )
       next(httpError);
     }
@@ -62,7 +62,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving users] - [index - POST]: ${error.message}`
+        error.message
       )
       next(httpError);
     }

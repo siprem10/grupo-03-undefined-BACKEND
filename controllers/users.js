@@ -18,7 +18,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving users] - [index - GET]: ${error.message}`
+        error.message
       );
       next(httpError);
     }
@@ -35,7 +35,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving user ${id}] - [index - GET]: ${error.message}`
+        error.message
       );
       next(httpError);
     }
@@ -59,7 +59,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error creating user] - [index - POST]: ${error.message}`
+        error.message
       );
       next(httpError);
     }
@@ -85,7 +85,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error updating user] - [index - PUT]: ${error.message}`
+        error.message
       );
       next(httpError);
     }
@@ -106,7 +106,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error deleting user] - [index - DELETE]: ${error.message}`
+        error.message
       );
       next(httpError);
     }
