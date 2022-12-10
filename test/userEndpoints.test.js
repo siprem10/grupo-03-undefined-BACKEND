@@ -173,3 +173,17 @@ describe('POST /users', () => {
     }
   });
 });
+
+describe('PUT /users/:id', () => {
+  test('Should response with status 401 when the token is not sent or is invalid', async () => {
+    const minId = await queryInterface.rawSelect('Users', {}, ['id']);
+    const maxId = minId + 19;
+    testTokenNotSentOrInvalid(request(app).put(`/users/${maxId}`));
+  });
+});
+
+describe('DELETE /users/:id', () => {
+  test('Should response with status 401 when the token is not sent', async () => {
+    testTokenNotSentOrInvalid(request(app).delete(`users/${1}`));
+  });
+});
