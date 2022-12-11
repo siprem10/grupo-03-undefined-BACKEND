@@ -8,14 +8,12 @@ module.exports = {
         description: 'Ingreso de dinero',
         createdAt: new Date(),
         updatedAt: new Date(),
-        active: true,
       },
       {
         name: 'Outcomes',
         description: 'Egreso de dinero',
         createdAt: new Date(),
         updatedAt: new Date(),
-        active: true,
       },
     ];
 
