@@ -19,8 +19,8 @@ module.exports = {
       const transactions = await Transaction.findAll({
         where: {
           [Op.or]: [
-            { id: decodedToken.id },
-            { userId: decodedToken.id }
+            { userId: decodedToken.id },
+            { toUserId: decodedToken.id }
           ]
         }, include: [{
           model: Category, where: {
