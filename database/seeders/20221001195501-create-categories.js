@@ -4,11 +4,11 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const categories = [
       {
-        type: 'Ingreso de dinero',
+        name: 'Ingreso de dinero',
         createdAt: new Date()
       },
       {
-        type: 'Egreso de dinero',
+        name: 'Egreso de dinero',
         createdAt: new Date()
       },
     ];
