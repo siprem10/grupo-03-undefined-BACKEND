@@ -10,18 +10,25 @@ module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
 
-      const {name} = req.query;
-      const findName = name ? name: "Ingreso";
+      const { name } = req.query;
+      const findName = name ? name : "Ingreso";
 
       const token = req.header('auth-token');
       const decodedToken = decodeToken(token);
-      
+
       const transactions = await Transaction.findAll({
-        where: { id: decodedToken.id }, include: [{model: Category, where: {
-          name: {
-            [Op.substring]: findName
+        where: {
+          [Op.or]: [
+            { id: decodedToken.id },
+            { userId: decodedToken.id }
+          ]
+        }, include: [{
+          model: Category, where: {
+            name: {
+              [Op.substring]: findName
+            }
           }
-        }}]
+        }]
       });
 
       if (!transactions || !transactions.length) {
@@ -46,7 +53,7 @@ module.exports = {
   getAll: catchAsync(async (req, res, next) => {
     try {
 
-      const transactions = await Transaction.findAll();
+      const transactions = await Transaction.findAll({ include: [{ model: Category }] });
 
       endpointResponse({
         res,
@@ -68,9 +75,7 @@ module.exports = {
 
       const { id } = req.params;
 
-      const transaction = await Transaction.findOne({
-        where: { id },
-      });
+      const transaction = await Transaction.findOne({ where: { id }, include: [{ model: Category }] });
 
       if (!transaction) {
         throw new Error(`No transaction with id ${id}`);
@@ -99,16 +104,12 @@ module.exports = {
 
       const { concept, categoryId, amount, toUserId } = req.body;
 
-      // if(!categoryId || toUserId){
-      //   throw new Error("CategoryId not found")
-      // }
-
       const transaction = await Transaction.create({
+        concept,
+        amount,
         userId: decodedToken.id,
         toUserId,
-        concept,
         categoryId,
-        amount
       });
 
       endpointResponse({
@@ -131,13 +132,9 @@ module.exports = {
       const { concept } = req.body;
       const { id } = req.params;
 
-      if (!concept) {
-        throw new Error('Concept must be provided');
-      }
-
-      const transaction = await Transaction.update(req.body, {
+      const transaction = await Transaction.update({ concept }, {
         where: { id: id },
-      });      
+      });
 
       endpointResponse({
         res,
@@ -156,10 +153,10 @@ module.exports = {
 
   deleteById: catchAsync(async (req, res, next) => {
     const { id } = req.params;
-    try { 
-      const deleted = await Transaction.destroy({where: { id: id }});
+    try {
+      const deleted = await Transaction.destroy({ where: { id: id } });
 
-      if(!deleted){
+      if (!deleted) {
         throw new Error(`Transaction with id ${id} was already deleted`);
       }
       endpointResponse({
