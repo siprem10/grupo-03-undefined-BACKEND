@@ -3,17 +3,25 @@ const { endpointResponse } = require('../helpers/success');
 const { catchAsync } = require('../helpers/catchAsync');
 const { Transaction, Category } = require('../database/models');
 const { decodeToken } = require('../utils/jwt');
+const { Op } = require('sequelize');
 
 module.exports = {
 
   get: catchAsync(async (req, res, next) => {
     try {
 
+      const {name} = req.query;
+      const findName = name ? name: "Ingreso";
+
       const token = req.header('auth-token');
       const decodedToken = decodeToken(token);
       
       const transactions = await Transaction.findAll({
-        where: { id: decodedToken.id }, include: [{model: Category }]
+        where: { id: decodedToken.id }, include: [{model: Category, where: {
+          name: {
+            [Op.substring]: findName
+          }
+        }}]
       });
 
       if (!transactions || !transactions.length) {
