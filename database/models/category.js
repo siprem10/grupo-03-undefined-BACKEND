@@ -10,25 +10,25 @@ module.exports = (sequelize, DataTypes) => {
   // Model definition
   Category.init({
     id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true
     },
     name: {
-      type: Sequelize.STRING,
+      type: DataTypes.STRING,
       allowNull: false
     },
     createdAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false
     },
     updatedAt: {
-      type: Sequelize.DATE,
+      type: DataTypes.DATE,
       allowNull: false
     },
     deletedAt: {
-      type: Sequelize.DATE
+      type: DataTypes.DATE
     }
   },
     {
