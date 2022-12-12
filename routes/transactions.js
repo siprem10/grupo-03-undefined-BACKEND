@@ -5,27 +5,30 @@ const validationResultHandler = require('../middlewares/validationResultHandler'
 const router = express.Router();
 
 const {
-  getAllTransactions,
-  getTransaction,
-  createTransaction,
-  editTransaction,
-  deleteTransaction,
+  get,
+  getAll,
+  getById,
+  create,
+  editById,
+  deleteById,
 } = require('../controllers/transactions');
 
-router.get('/', verifyToken, getAllTransactions);
 
-router.get('/:id', verifyToken, getTransaction);
+router.get('/', verifyToken, get);
+router.get('/all', verifyToken, getAll);
+
+router.get('/:id', verifyToken, getById);
 
 router.post(
   '/',
   verifyToken,
   postValidator,
   validationResultHandler,
-  createTransaction
+  create
 );
 
-router.put('/:id', verifyToken, editTransaction);
+router.put('/:id', verifyToken, editById);
 
-router.delete('/:id', verifyToken, deleteTransaction);
+router.delete('/:id', verifyToken, deleteById);
 
 module.exports = router;

@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      description: {
+      concept: {
         type: Sequelize.STRING,
       },
       amount: {
@@ -23,6 +23,10 @@ module.exports = {
           key: 'id',
         },
       },
+      toUserId: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+      },
       categoryId: {
         allowNull: false,
         type: Sequelize.INTEGER,
@@ -30,10 +34,6 @@ module.exports = {
           model: 'Categories',
           key: 'id',
         },
-      },
-      date: {
-        allowNull: false,
-        type: Sequelize.DATE,
       },
       createdAt: {
         allowNull: false,

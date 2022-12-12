@@ -4,16 +4,12 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     const categories = [
       {
-        name: 'Incomes',
-        description: 'Ingreso de dinero',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        name: 'Ingreso de dinero',
+        createdAt: new Date()
       },
       {
-        name: 'Outcomes',
-        description: 'Egreso de dinero',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        name: 'Egreso de dinero',
+        createdAt: new Date()
       },
     ];
 
