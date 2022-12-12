@@ -26,9 +26,6 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
-// static files (avatars)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
 // error handler
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
