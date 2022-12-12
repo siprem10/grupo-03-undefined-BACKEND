@@ -10,15 +10,17 @@ module.exports = {
     }
 
     const transactions = [];
+    let toggle = true;
 
     // Create 20 transactions
     for (let i = 0; i < 20; i++) {
+      toggle = !toggle;
       transactions.push({
-        description: faker.finance.transactionDescription(),
+        concept: faker.finance.transactionDescription(),
         amount: faker.finance.amount(),
         userId: faker.datatype.number({ min: user, max: user + 18 }),
+        toUserId: toggle ? (faker.datatype.number({ min: user, max: user + 18 })) : null,
         categoryId: 1,
-        date: faker.date.past(),
         createdAt: faker.date.past(),
         updatedAt: faker.date.past(),
         deletedAt: null,

@@ -11,12 +11,50 @@ module.exports = (sequelize, DataTypes) => {
   // Model definition
   Transaction.init(
     {
-      description: DataTypes.STRING,
-      amount: DataTypes.INTEGER,
-      userId: DataTypes.INTEGER,
-      categoryId: DataTypes.INTEGER,
-      date: DataTypes.DATE,
-      deletedAt: DataTypes.STRING,
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
+      concept: {
+        type: Sequelize.STRING,
+      },
+      amount: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+      },
+      toUserId: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+      },
+      categoryId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Categories',
+          key: 'id',
+        },
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+      },
     },
     {
       sequelize,
