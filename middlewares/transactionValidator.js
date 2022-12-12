@@ -1,29 +1,54 @@
 const { body } = require('express-validator');
+const User = require("../repositories/users");
+const Category = require("../repositories/category");
 
-const isUserId = body('userId')
+const isConcept = body('concept')
   .notEmpty()
-  .withMessage('userId required')
-  .isNumeric()
-  .withMessage('userId must be a number');
+  .withMessage('concept required')
+  .isString()
+  .withMessage('concept must be a string');
+
+const isToUserId = body("toUserId")
+  .custom(async (toUserId) => {
+
+    if(toUserId){
+      const findUser = await User.getById(toUserId);
+
+      if (!findUser) {
+        throw new Error("User not found!");
+      }
+    }
+  });
 
 const isCategoryId = body('categoryId')
   .notEmpty()
   .withMessage('categoryId required')
   .isNumeric()
-  .withMessage('categoryId must be a number');
+  .withMessage('categoryId must be a number')
+  .custom(async (categoryId) => {
+
+    const findCategory = await Category.getById(categoryId);
+
+    if (!findCategory) {
+      throw new Error("Category not found!");
+    }
+  });
 
 const isAmount = body('amount')
   .notEmpty()
   .withMessage('amount required')
   .isNumeric()
-  .withMessage('amount must be a number');
+  .withMessage('amount must be a number')
+  .custom(async (amount) => {
+    if (amount <= 0) {
+      throw new Error("cannot be (amount <= 0)");
+    }
+  });
 
-const isDate = body('date').notEmpty().withMessage('date required');
-// .isDate()
-// .withMessage('date must be a date');
-
-const postValidator = [isUserId, isCategoryId, isAmount, isDate];
+const putValidator = [isConcept];
+const postValidator = [isToUserId, isCategoryId, isAmount];
 
 module.exports = {
+  putValidator,
   postValidator,
 };

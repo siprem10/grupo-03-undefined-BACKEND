@@ -1,6 +1,6 @@
 const express = require('express');
 const { verifyToken } = require('../middlewares/jwtValidator');
-const { postValidator } = require('../middlewares/transactionValidator');
+const { putValidator, postValidator } = require('../middlewares/transactionValidator');
 const validationResultHandler = require('../middlewares/validationResultHandler');
 const router = express.Router();
 
@@ -27,7 +27,11 @@ router.post(
   create
 );
 
-router.put('/:id', verifyToken, editById);
+router.put('/:id',
+  verifyToken,
+  putValidator,
+  validationResultHandler,
+  editById);
 
 router.delete('/:id', verifyToken, deleteById);
 
