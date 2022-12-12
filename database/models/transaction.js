@@ -15,18 +15,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       concept: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
       },
       amount: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'Users',
           key: 'id',
@@ -34,11 +34,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       toUserId: {
         allowNull: true,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       categoryId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'Categories',
           key: 'id',
@@ -46,14 +46,14 @@ module.exports = (sequelize, DataTypes) => {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
       deletedAt: {
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
       },
     },
     {
