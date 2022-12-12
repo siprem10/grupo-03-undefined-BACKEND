@@ -38,31 +38,26 @@ module.exports = {
     }
   }),
   createUser: catchAsync(async (req, res, next) => {
-    try {
+  try {
       const { firstName, lastName, email, password } = req.body;
+      let hashedPassword = await bcrypt.hash(password, 10);
 
-      const urlDefaultImage = `${req.protocol}://${req.get(
-        'host'
-      )}/uploads/default-image.png`;
-
-      const response = {
+      const response = await User.create({
         firstName,
         lastName,
         email,
-        password: await bcrypt.hash(password, 10),
-        avatar: urlDefaultImage,
-      };
-
-      await User.create(response);
-      delete response.password;
-
+        password: hashedPassword,
+      });
       endpointResponse({
         res,
         message: `User posted successfully`,
         body: response,
       });
     } catch (error) {
-      const httpError = createHttpError(error.statusCode, error.message);
+      const httpError = createHttpError(
+        error.statusCode,
+        error.message
+      );
       next(httpError);
     }
   }),
