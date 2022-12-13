@@ -8,20 +8,32 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   // Model definition
-  Category.init(
-    {
-      name: DataTypes.STRING,
-      description: DataTypes.STRING,
-      deletedAt: {
-        type: DataTypes.DATE
-      },
-      active: DataTypes.BOOLEAN
+  Category.init({
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    updatedAt: {
+      type: DataTypes.DATE
+    },
+    deletedAt: {
+      type: DataTypes.DATE
+    }
+  },
     {
       sequelize,
       timestamps: true,
       modelName: 'Category'
-    }
-  );
+    });
   return Category;
 };

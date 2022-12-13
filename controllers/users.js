@@ -38,7 +38,7 @@ module.exports = {
     }
   }),
   createUser: catchAsync(async (req, res, next) => {
-    try {
+  try {
       const { firstName, lastName, email, password } = req.body;
       let hashedPassword = await bcrypt.hash(password, 10);
 
@@ -64,7 +64,7 @@ module.exports = {
       const { firstName, lastName, email, newPassword } = req.body;
       const { id } = req.params;
       const response = await User.findByPk(id);
-
+      
       const user = {
         firstName,
         lastName,

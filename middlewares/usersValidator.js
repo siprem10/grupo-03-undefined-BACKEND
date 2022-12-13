@@ -72,7 +72,7 @@ const updateValidator = [
   isFirstNameValid,
   isLastNameValid,
   emailsExists,
-  currentPasswordIncorrect,
+  currentPasswordIncorrect
 ];
 
 module.exports = {
