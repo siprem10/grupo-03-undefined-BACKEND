@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   class Transaction extends Model {
     // Associations
     static associate(models) {
-      Transaction.belongsTo(models.User, { foreignKey: 'userId' });
+      Transaction.belongsTo(models.User, { as: "user", foreignKey: 'userId' });
+      Transaction.belongsTo(models.User, { as: "toUser", foreignKey: 'toUserId' });
       Transaction.belongsTo(models.Category, { foreignKey: 'categoryId' });
     }
   }
@@ -35,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
       toUserId: {
         allowNull: true,
         type: DataTypes.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
       categoryId: {
         allowNull: false,

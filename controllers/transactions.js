@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors');
 const { endpointResponse } = require('../helpers/success');
 const { catchAsync } = require('../helpers/catchAsync');
-const { Transaction, Category } = require('../database/models');
+const { Transaction, Category, User } = require('../database/models');
 const { decodeToken } = require('../utils/jwt');
 const { Op } = require('sequelize');
 
@@ -28,7 +28,10 @@ module.exports = {
               [Op.substring]: findName
             }
           }
-        }]
+        },
+        {model: User, as: "user", attributes: { exclude: ['password'] }},
+        {model: User, as: "toUser", attributes: { exclude: ['password'] }},
+      ]
       });
 
       if (!transactions || !transactions.length) {
