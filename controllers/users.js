@@ -7,36 +7,33 @@ const bcrypt = require('bcrypt');
 module.exports = {
   getAll: catchAsync(async (req, res, next) => {
     try {
-      const response = await User.findAll({attributes: {exclude: ['password']}});
+      const response = await User.findAll({
+        attributes: { exclude: ['password'] },
+      });
 
       endpointResponse({
         res,
         message: 'Users retrieved successfully',
         body: response,
       });
-
     } catch (error) {
-      const httpError = createHttpError(
-        error.statusCode,
-        error.message
-      );
+      const httpError = createHttpError(error.statusCode, error.message);
       next(httpError);
     }
   }),
   getById: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = await User.findByPk(id, {attributes: {exclude: ['password']}});
+      const response = await User.findByPk(id, {
+        attributes: { exclude: ['password'] },
+      });
       endpointResponse({
         res,
         message: `User ${id} retrieved successfully`,
         body: response,
       });
     } catch (error) {
-      const httpError = createHttpError(
-        error.statusCode,
-        error.message
-      );
+      const httpError = createHttpError(error.statusCode, error.message);
       next(httpError);
     }
   }),
@@ -57,36 +54,36 @@ module.exports = {
         body: response,
       });
     } catch (error) {
-      const httpError = createHttpError(
-        error.statusCode,
-        error.message
-      );
+      const httpError = createHttpError(error.statusCode, error.message);
       next(httpError);
     }
   }),
   updateUser: catchAsync(async (req, res, next) => {
     const url = req.protocol + '://' + req.get('host');
     try {
-      const { firstName, lastName, email } = req.body;
+      const { firstName, lastName, email, newPassword } = req.body;
       const { id } = req.params;
+      const response = await User.findByPk(id);
+
       const user = {
         firstName,
         lastName,
         email,
-        avatar: `${url}/assets/avatars/${req.file.filename}` || null,
+        avatar: req.file
+          ? `${url}/uploads/${req.file.filename}`
+          : response.avatar,
       };
 
-      const response = await User.findByPk(id).update(user);
+      if (newPassword) user.password = await bcrypt.hash(newPassword, 10);
+      response.update(user);
+
       endpointResponse({
         res,
         message: `User ${id} updated successfully`,
         body: response,
       });
     } catch (error) {
-      const httpError = createHttpError(
-        error.statusCode,
-        error.message
-      );
+      const httpError = createHttpError(error.statusCode, error.message);
       next(httpError);
     }
   }),
@@ -104,10 +101,7 @@ module.exports = {
         body: response,
       });
     } catch (error) {
-      const httpError = createHttpError(
-        error.statusCode,
-        error.message
-      );
+      const httpError = createHttpError(error.statusCode, error.message);
       next(httpError);
     }
   }),
