@@ -3,6 +3,7 @@ const { User } = require('../database/models');
 const { endpointResponse } = require('../helpers/success');
 const { catchAsync } = require('../helpers/catchAsync');
 const bcrypt = require('bcrypt');
+const { getUser } = require('../repositories/users');
 
 module.exports = {
   getAll: catchAsync(async (req, res, next) => {
@@ -24,13 +25,16 @@ module.exports = {
   getById: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = await User.findByPk(id, {
-        attributes: { exclude: ['password'] },
-      });
+      const user = await getUser(id);
+
+      if(!user) {
+        throw new Error("Usuario no encontrado!")
+      }
+      
       endpointResponse({
         res,
         message: `User ${id} retrieved successfully`,
-        body: response,
+        body: user,
       });
     } catch (error) {
       const httpError = createHttpError(error.statusCode, error.message);
