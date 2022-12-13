@@ -8,6 +8,8 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
+    logging: false,
+    native: false,
 
     timestamps: true,
     underscored: false,
@@ -22,6 +24,8 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'mysql',
+    logging: false,
+    native: false,
   },
 
   test: {
