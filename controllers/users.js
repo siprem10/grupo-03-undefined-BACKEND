@@ -58,23 +58,17 @@ module.exports = {
         body: response,
       });
     } catch (error) {
-      const httpError = createHttpError(
-        error.statusCode,
-        error.message
-      );
+      const httpError = createHttpError(error.statusCode, error.message);
       next(httpError);
     }
   }),
   updateUser: catchAsync(async (req, res, next) => {
     const url = req.protocol + '://' + req.get('host');
     try {
-      const { firstName, lastName, email, newPassword, image } = req.body;
+      const { firstName, lastName, email, newPassword } = req.body;
       const { id } = req.params;
       const response = await User.findByPk(id);
-
-      console.log('req.file', req.file);
-      console.log('image', image);
-
+      
       const user = {
         firstName,
         lastName,

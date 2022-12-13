@@ -11,7 +11,23 @@ const indexRouter = require('./routes/index');
 const port = process.env.PORT || 3000;
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: '*',
+    credentials: true,
+    methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+    allowedHeaders: [
+      'Origin',
+      'X-Requested-With',
+      'Content-Type',
+      'Accept',
+      'auth-token',
+      'withcredentials',
+      'Authorization',
+      'authorization',
+    ],
+  })
+);
 
 app.use(logger('dev'));
 app.use(express.json());

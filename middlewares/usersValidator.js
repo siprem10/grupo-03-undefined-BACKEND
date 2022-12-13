@@ -1,6 +1,5 @@
 const { body } = require('express-validator');
 const { getByEmail } = require('../repositories/users');
-const multer = require('../middlewares/multerConfig');
 const db = require('../database/models');
 const { compare } = require('bcrypt');
 
@@ -73,8 +72,7 @@ const updateValidator = [
   isFirstNameValid,
   isLastNameValid,
   emailsExists,
-  currentPasswordIncorrect,
-  multer,
+  currentPasswordIncorrect
 ];
 
 module.exports = {

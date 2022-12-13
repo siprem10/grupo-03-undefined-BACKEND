@@ -12,6 +12,7 @@ const {
   postValidator,
   updateValidator,
 } = require('../middlewares/usersValidator');
+const multer = require('../middlewares/multerConfig');
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.post('/', postValidator, validationResultHandler, createUser);
 router.put(
   '/:id',
   verifyToken,
+  multer,
   updateValidator,
   validationResultHandler,
   updateUser
