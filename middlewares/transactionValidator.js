@@ -6,7 +6,13 @@ const isConcept = body('concept')
   .notEmpty()
   .withMessage('concept required')
   .isString()
-  .withMessage('concept must be a string');
+  .withMessage('concept must be a string')
+  .custom(async (concept) => {
+
+    if(concept.length > 14){
+      throw new Error("concept very long!");
+    }
+  });
 
 const isToUserId = body("toUserId")
   .custom(async (toUserId) => {
