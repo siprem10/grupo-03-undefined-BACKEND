@@ -4,6 +4,7 @@ const { endpointResponse } = require('../helpers/success');
 const { catchAsync } = require('../helpers/catchAsync');
 const bcrypt = require('bcrypt');
 const { getUser } = require('../repositories/users');
+const { decodeToken } = require('../utils/jwt');
 
 module.exports = {
   getAll: catchAsync(async (req, res, next) => {
@@ -24,10 +25,17 @@ module.exports = {
   }),
   getById: catchAsync(async (req, res, next) => {
     try {
+      const token = req.header('auth-token');
       const { id } = req.params;
+      const { excludeYou } = req.query;
+      const decodedToken = decodeToken(token);
       const user = await getUser(id);
 
       if(!user) {
+        throw new Error("Usuario no encontrado!")
+      }
+      
+      if(excludeYou && (user.id === decodedToken.id) || user.email === decodedToken.email){
         throw new Error("Usuario no encontrado!")
       }
       
