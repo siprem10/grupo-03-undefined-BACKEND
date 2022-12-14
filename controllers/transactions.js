@@ -97,21 +97,20 @@ module.exports = {
       const token = req.header('auth-token');
       const decodedToken = decodeToken(token);
 
-      const { concept, categoryId, amount, toUserId } = req.body;
-
+      const { concept, categoryId, amount } = req.body;
+      let { toUserId } = req.body;
       let type = "???";
-
+      
       if(categoryId) {
         type = "Egreso";
       }
-
-      if(toUserId === decodedToken.id) {
+      else if(!toUserId) {
+        toUserId = decodedToken.id;
         type = "Ingreso";
-      }
-      
-      if(toUserId !== decodedToken.id) {
+      }      
+      else {
         type = "Egreso";
-      }
+      }    
 
       const transaction = await Transaction.create({
         concept,
