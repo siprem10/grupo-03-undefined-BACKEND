@@ -20,8 +20,7 @@ module.exports = {
         userId: faker.datatype.number({ min: user, max: user + 18 }),
         toUserId: null,
         categoryId: faker.datatype.number({ min: 1, max: 5 }),
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past(),
+        createdAt: new Date(),
         deletedAt: null,
       });
     }
@@ -35,8 +34,7 @@ module.exports = {
         userId: faker.datatype.number({ min: user, max: user + 18 }),
         toUserId: faker.datatype.number({ min: user, max: user + 18 }),
         categoryId: null,
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past(),
+        createdAt: new Date(),
         deletedAt: null,
       });
     }
@@ -52,8 +50,7 @@ module.exports = {
         userId: idRepeat,
         toUserId: idRepeat,
         categoryId: null,
-        createdAt: faker.date.past(),
-        updatedAt: faker.date.past(),
+        createdAt: new Date(),
         deletedAt: null,
       });
     }
