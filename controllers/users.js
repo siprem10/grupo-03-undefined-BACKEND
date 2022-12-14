@@ -5,6 +5,7 @@ const { catchAsync } = require('../helpers/catchAsync');
 const bcrypt = require('bcrypt');
 const { getUser } = require('../repositories/users');
 const { decodeToken } = require('../utils/jwt');
+const { getExpiringDate, getCardNum } = require('../utils/creditCard');
 
 module.exports = {
   getAll: catchAsync(async (req, res, next) => {
@@ -52,13 +53,15 @@ module.exports = {
   createUser: catchAsync(async (req, res, next) => {
   try {
       const { firstName, lastName, email, password } = req.body;
-      let hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
 
       const response = await User.create({
         firstName,
         lastName,
         email,
         password: hashedPassword,
+        creditCard: getCardNum(),
+        creditCardExp: getExpiringDate(new Date()),
       });
       endpointResponse({
         res,
@@ -66,6 +69,7 @@ module.exports = {
         body: response,
       });
     } catch (error) {
+      console.log(error)
       const httpError = createHttpError(error.statusCode, error.message);
       next(httpError);
     }
