@@ -23,7 +23,14 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     avatar: DataTypes.STRING,
     roleId: DataTypes.INTEGER,
-    points: DataTypes.INTEGER,
+    creditCard: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    creditCardExp: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     deletedAt: {
       type: DataTypes.STRING
     },

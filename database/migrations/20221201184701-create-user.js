@@ -32,8 +32,13 @@ module.exports = {
           key: 'id'
         }
       },
-      points: {
-        type: Sequelize.INTEGER
+      creditCard: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      creditCardExp: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
