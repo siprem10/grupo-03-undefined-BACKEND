@@ -2,15 +2,13 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+
     const categories = [
-      {
-        name: 'Ingreso de dinero',
-        createdAt: new Date()
-      },
-      {
-        name: 'Egreso de dinero',
-        createdAt: new Date()
-      },
+      { name: 'Internet', createdAt: new Date() },
+      { name: 'Agua', createdAt: new Date()  },
+      { name: 'Luz', createdAt: new Date()  },
+      { name: 'Gas', createdAt: new Date()  },
+      { name: 'Celular', createdAt: new Date()  },
     ];
 
     await queryInterface.bulkInsert('Categories', categories, {});
