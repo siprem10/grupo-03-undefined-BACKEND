@@ -8,6 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      type: {
+        allowNull: false,
+        type: Sequelize.ENUM(["Ingreso", "Egreso"]),
+      },
       concept: {
         type: Sequelize.STRING,
       },
@@ -32,7 +36,7 @@ module.exports = {
         },
       },
       categoryId: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.INTEGER,
         references: {
           model: 'Categories',

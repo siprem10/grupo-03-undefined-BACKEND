@@ -10,9 +10,6 @@ module.exports = {
   get: catchAsync(async (req, res, next) => {
     try {
 
-      const { name } = req.query;
-      const findName = name ? name : "Ingreso";
-
       const token = req.header('auth-token');
       const decodedToken = decodeToken(token);
 
@@ -22,16 +19,11 @@ module.exports = {
             { userId: decodedToken.id },
             { toUserId: decodedToken.id }
           ]
-        }, include: [{
-          model: Category, where: {
-            name: {
-              [Op.substring]: findName
-            }
-          }
-        },
-        {model: User, as: "user", attributes: { exclude: ['password'] }},
-        {model: User, as: "toUser", attributes: { exclude: ['password'] }},
-      ]
+        }, include: [
+          { model: Category },
+          { model: User, as: "user", attributes: { exclude: ['password'] } },
+          { model: User, as: "toUser", attributes: { exclude: ['password'] } },
+        ]
       });
 
       if (!transactions || !transactions.length) {
@@ -107,12 +99,27 @@ module.exports = {
 
       const { concept, categoryId, amount, toUserId } = req.body;
 
+      let type = "???";
+
+      if(categoryId) {
+        type = "Egreso";
+      }
+
+      if(toUserId === decodedToken.id) {
+        type = "Ingreso";
+      }
+      
+      if(toUserId !== decodedToken.id) {
+        type = "Egreso";
+      }
+
       const transaction = await Transaction.create({
         concept,
         amount,
         userId: decodedToken.id,
         toUserId,
         categoryId,
+        type,
       });
 
       endpointResponse({

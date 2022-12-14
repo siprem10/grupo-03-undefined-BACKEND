@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+      type: {
+        allowNull: false,
+        type: DataTypes.ENUM(["Ingreso", "Egreso"]),
+      },
       concept: {
         type: DataTypes.STRING,
       },
@@ -42,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       categoryId: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.INTEGER,
         references: {
           model: 'Categories',
