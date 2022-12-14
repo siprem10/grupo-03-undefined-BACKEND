@@ -12,13 +12,14 @@ const {
   putValidator,
   postValidator,
 } = require('../middlewares/categoryValidator');
+const { roleValidator } = require("../middlewares/roleValidator");
 
 const router = express.Router();
 
-router.get("/", verifyToken, validationResultHandler, getAll);
-router.get("/:id", verifyToken, validationResultHandler, getById);
-router.post("/", verifyToken, postValidator, validationResultHandler, create);
-router.delete("/:id", verifyToken, validationResultHandler, deleteById);
-router.put("/:id", verifyToken, putValidator, validationResultHandler, editById);
+router.get("/", verifyToken, getAll);
+router.get("/:id", verifyToken, getById);
+router.post("/", verifyToken, postValidator, roleValidator, validationResultHandler, create);
+router.delete("/:id", verifyToken, roleValidator, validationResultHandler, deleteById);
+router.put("/:id", verifyToken, putValidator, roleValidator, validationResultHandler, editById);
 
 module.exports = router;
