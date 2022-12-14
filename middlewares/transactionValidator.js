@@ -26,19 +26,19 @@ const isToUserId = body("toUserId")
     }
   });
 
-const isCategoryId = body('categoryId')
-  .notEmpty()
-  .withMessage('categoryId required')
-  .isNumeric()
-  .withMessage('categoryId must be a number')
-  .custom(async (categoryId) => {
+// const isCategoryId = body('categoryId')
+//   .notEmpty()
+//   .withMessage('categoryId required')
+//   .isNumeric()
+//   .withMessage('categoryId must be a number')
+//   .custom(async (categoryId) => {
 
-    const findCategory = await Category.getById(categoryId);
+//     const findCategory = await Category.getById(categoryId);
 
-    if (!findCategory) {
-      throw new Error("Category not found!");
-    }
-  });
+//     if (!findCategory) {
+//       throw new Error("Category not found!");
+//     }
+//   });
 
 const isAmount = body('amount')
   .notEmpty()
@@ -52,7 +52,7 @@ const isAmount = body('amount')
   });
 
 const putValidator = [isConcept];
-const postValidator = [isToUserId, isCategoryId, isAmount];
+const postValidator = [isToUserId, /*isCategoryId,*/ isAmount];
 
 module.exports = {
   putValidator,

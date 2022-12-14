@@ -117,8 +117,8 @@ module.exports = {
         concept,
         amount,
         userId: decodedToken.id,
-        toUserId,
-        categoryId,
+        toUserId: toUserId ? toUserId : null,
+        categoryId: categoryId ? categoryId : null,
         type,
       });
 
