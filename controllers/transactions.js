@@ -14,6 +14,7 @@ module.exports = {
       const decodedToken = decodeToken(token);
 
       const transactions = await Transaction.findAll({
+        order: [['createdAt', 'DESC']],
         where: {
           [Op.or]: [
             { userId: decodedToken.id },
@@ -48,7 +49,7 @@ module.exports = {
   getAll: catchAsync(async (req, res, next) => {
     try {
 
-      const transactions = await Transaction.findAll({ include: [{ model: Category }] });
+      const transactions = await Transaction.findAll({ include: [{ model: Category }], order: [['createdAt', 'ASC']] });
 
       endpointResponse({
         res,
