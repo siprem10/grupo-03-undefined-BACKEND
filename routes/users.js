@@ -1,11 +1,32 @@
-const express = require('express')
+const express = require('express');
+const { verifyToken } = require('../middlewares/jwtValidator');
 const {
-   get,
-} = require('../controllers/users')
+  getAll,
+  getById,
+  createUser,
+  updateUser,
+  deleteUser,
+} = require('../controllers/users');
+const validationResultHandler = require('../middlewares/validationResultHandler');
+const {
+  postValidator,
+  updateValidator,
+} = require('../middlewares/usersValidator');
+const multer = require('../middlewares/multerConfig');
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', get)
+router.get('/', verifyToken, getAll);
+router.get('/:id', verifyToken, getById);
+router.post('/', postValidator, validationResultHandler, createUser);
+router.put(
+  '/:id',
+  verifyToken,
+  multer,
+  updateValidator,
+  validationResultHandler,
+  updateUser
+);
+router.delete('/:id', verifyToken, deleteUser);
 
-
-module.exports = router
+module.exports = router;
