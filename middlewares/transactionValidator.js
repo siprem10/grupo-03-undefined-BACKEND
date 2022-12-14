@@ -9,7 +9,7 @@ const isConcept = body('concept')
   .withMessage('concept must be a string')
   .custom(async (concept) => {
 
-    if(concept.length > 14){
+    if(concept.length > 22){
       throw new Error("concept very long!");
     }
   });
@@ -25,20 +25,6 @@ const isToUserId = body("toUserId")
       }
     }
   });
-
-// const isCategoryId = body('categoryId')
-//   .notEmpty()
-//   .withMessage('categoryId required')
-//   .isNumeric()
-//   .withMessage('categoryId must be a number')
-//   .custom(async (categoryId) => {
-
-//     const findCategory = await Category.getById(categoryId);
-
-//     if (!findCategory) {
-//       throw new Error("Category not found!");
-//     }
-//   });
 
 const isAmount = body('amount')
   .notEmpty()
