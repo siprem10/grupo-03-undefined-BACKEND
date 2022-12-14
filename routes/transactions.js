@@ -12,10 +12,11 @@ const {
   editById,
   deleteById,
 } = require('../controllers/transactions');
+const { roleValidator } = require('../middlewares/roleValidator');
 
 
 router.get('/', verifyToken, get);
-router.get('/all', verifyToken, getAll);
+router.get('/all', verifyToken, roleValidator, validationResultHandler, getAll);
 
 router.get('/:id', verifyToken, getById);
 
@@ -33,6 +34,6 @@ router.put('/:id',
   validationResultHandler,
   editById);
 
-router.delete('/:id', verifyToken, deleteById);
+router.delete('/:id', verifyToken, roleValidator, validationResultHandler, deleteById);
 
 module.exports = router;
