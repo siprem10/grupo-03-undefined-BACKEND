@@ -1,99 +1,102 @@
+const createHttpError = require('http-errors');
 const { Category } = require("../database/models");
-
-const getCategories = async (req, res) => {
-  try {
-    const categories = await Category.findAll({
-      where: {
-        active: true,
-      },
-    });
-    return res.json(categories);
-  } catch (error) {
-    return res.status(500).json({ message: "Something went wrong", error });
-  }
-};
-
-const addCategory = async (req, res) => {
-  const { name, description } = req.body;
-
-  if (!name || !description) {
-    return res
-      .status(400)
-      .json({ message: "No name or description provided", error });
-  }
-
-  try {
-    await Category.create({
-      name,
-      description,
-      active: true,
-    });
-
-    return res.status(201).json({ message: "Category created successfully" });
-  } catch (error) {
-    return res.status(500).json({ message: "Something went wrong", error });
-  }
-};
-
-const getCategoryById = async (req, res) => {
-  try {
-    const id = req.params.id;
-    if (!id) return res.status(400).json({ message: "No id provided" });
-
-    const category = await Category.findOne({
-      where: {
-        id,
-      },
-    });
-
-    if (!category)
-      return res
-        .status(404)
-        .json({ message: "Category not found", category: null });
-
-    return res.json(category);
-  } catch (error) {
-    return res.status(500).json({ message: "Something went wrong", error });
-  }
-};
-
-const editCategory = async (req, res) => {
-  const id = req.params.id;
-  const { name, description } = req.body;
-  if (!id) return res.status(400).json({ message: "No id provided" });
-
-  try {
-    await Category.update(
-      {
-        name,
-        description,
-      },
-      { where: { id } }
-    );
-    return res.json({ message: "Category updated" });
-  } catch (error) {}
-};
-
-const deleteCategory = async (req, res) => {
-  const { id } = req.params;
-  try {
-    await Category.update(
-      {
-        active: false,
-        deletedAt: new Date(),
-      },
-      { where: { id } }
-    );
-    return res.json({ message: "Category Deleted" });
-  } catch (error) {
-    return res.status(500).json({ message: "Something went wrong", error });
-  }
-};
+const { endpointResponse } = require('../helpers/success');
+const { catchAsync } = require('../helpers/catchAsync');
 
 module.exports = {
-  getCategories,
-  addCategory,
-  getCategoryById,
-  editCategory,
-  deleteCategory,
+  getAll: catchAsync(async (req, res, next) => {
+    try {
+      const categories = await Category.findAll({ paranoid: true });
+
+      if (!categories || !categories.length) {
+        throw new Error("Categories not found");
+      }
+
+      endpointResponse({
+        res,
+        message: 'Categories retrieved successfully',
+        body: categories,
+      });
+
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
+  getById: catchAsync(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const category = await Category.findByPk(id, { paranoid: true });
+
+      if (!category) {
+        throw new Error(`Category with id ${id} not found`);
+      }
+
+      endpointResponse({
+        res,
+        message: 'Category retrieved successfully',
+        body: category,
+      });
+
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
+
+  create: catchAsync(async (req, res, next) => {
+    try {
+      const { name } = req.body;
+
+      const category = await Category.create({ name });
+
+      endpointResponse({
+        res,
+        message: 'Category created successfully',
+        body: category,
+      });
+
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
+
+  editById: catchAsync(async (req, res, next) => {
+    try {
+      const { id } = req.params.id;
+      const { name } = req.body;
+
+      const updated = await Category.update({ name }, { where: { id } });
+
+      endpointResponse({
+        res,
+        message: 'Category updated successfully',
+        body: updated,
+      });
+
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
+
+  deleteById: catchAsync(async (req, res, next) => {
+    try {
+      const { id } = req.params.id;
+
+      const deleted = await Category.destroy({ where: { id } });
+
+      endpointResponse({
+        res,
+        message: 'Category updated successfully',
+        body: deleted,
+      });
+
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
 };
