@@ -9,7 +9,7 @@ const isConcept = body('concept')
   .withMessage('concept must be a string')
   .custom(async (concept) => {
 
-    if(concept.length > 22){
+    if(concept.length > 20){
       throw new Error("concept very long!");
     }
   });

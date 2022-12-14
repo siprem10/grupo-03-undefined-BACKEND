@@ -15,7 +15,7 @@ module.exports = {
     for (let i = 0; i < 20; i++) {
 
       transactions.push({
-        concept: faker.finance.transactionDescription().substring(0, 22),
+        concept: faker.finance.transactionDescription().substring(0, 20),
         amount: faker.finance.amount(),
         userId: faker.datatype.number({ min: user, max: user + 18 }),
         toUserId: null,
@@ -30,7 +30,7 @@ module.exports = {
     for (let i = 0; i < 20; i++) {
 
       transactions.push({
-        concept: faker.finance.transactionDescription().substring(0, 22),
+        concept: faker.finance.transactionDescription().substring(0, 20),
         amount: faker.finance.amount(),
         userId: faker.datatype.number({ min: user, max: user + 18 }),
         toUserId: faker.datatype.number({ min: user, max: user + 18 }),
@@ -47,7 +47,7 @@ module.exports = {
       const idRepeat = faker.datatype.number({ min: user, max: user + 18 });
 
       transactions.push({
-        concept: faker.finance.transactionDescription().substring(0, 22),
+        concept: faker.finance.transactionDescription().substring(0, 20),
         amount: faker.finance.amount(),
         userId: idRepeat,
         toUserId: idRepeat,
