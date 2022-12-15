@@ -48,12 +48,10 @@ app.use((req, res, next) => {
 // error handler
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
-  const error = (res.locals.error =
-    req.app.get('env') === 'development' ? err : {});
   const status = err.status || 500;
 
   // render the error page
-  res.status(status).send({ error });
+  res.status(status).send({ error: err });
   next();
 });
 
