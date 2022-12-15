@@ -16,7 +16,8 @@ app.use(
     origin: '*',
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-    allowedHeaders: [
+    allowedHeaders: [      
+      'Access-Control-Allow-Origin',
       'Origin',
       'X-Requested-With',
       'Content-Type',
