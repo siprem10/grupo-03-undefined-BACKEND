@@ -10,6 +10,7 @@
     "url": "https://github.com/gabodmc/nodejs-boilerplate"
   },
   "scripts": {
+    "db:drop": "npx sequelize db:drop",
     "db:create": "npx sequelize db:create",
     "db:migrate": "npx sequelize db:migrate",
     "db:seed": "npx sequelize db:seed:all",
