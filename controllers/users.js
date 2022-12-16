@@ -16,7 +16,7 @@ module.exports = {
 
       endpointResponse({
         res,
-        message: 'Users retrieved successfully',
+        message: 'Usuarios recibidos correctamente!',
         body: response,
       });
     } catch (error) {
@@ -42,7 +42,7 @@ module.exports = {
       
       endpointResponse({
         res,
-        message: `User ${id} retrieved successfully`,
+        message: `Usuario recibido correctamente!`,
         body: user,
       });
     } catch (error) {
@@ -65,7 +65,7 @@ module.exports = {
       });
       endpointResponse({
         res,
-        message: `User posted successfully`,
+        message: `Usuario creado correctamente!`,
         body: response,
       });
     } catch (error) {
@@ -95,7 +95,7 @@ module.exports = {
 
       endpointResponse({
         res,
-        message: `User ${id} updated successfully`,
+        message: `Usuario actualizado correctamente!`,
         body: response,
       });
     } catch (error) {
@@ -113,7 +113,7 @@ module.exports = {
       });
       endpointResponse({
         res,
-        message: `User ${id} deleted successfully`,
+        message: `Usuario borrado correctamente!`,
         body: response,
       });
     } catch (error) {

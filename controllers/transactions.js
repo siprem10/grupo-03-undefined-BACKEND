@@ -28,12 +28,12 @@ module.exports = {
       });
 
       if (!transactions || !transactions.length) {
-        throw new Error(`No transaction with id ${id}`);
+        throw new Error(`No se encontraron transacciones!`);
       }
 
       endpointResponse({
         res,
-        message: 'Transaction retrieved successfully',
+        message: 'Transacciones recibidas correctamente!',
         body: transactions,
       });
 
@@ -53,7 +53,7 @@ module.exports = {
 
       endpointResponse({
         res,
-        message: 'Transaction retrieved successfully',
+        message: 'Transacciones recibidas correctamente!',
         body: transactions,
       });
 
@@ -74,12 +74,12 @@ module.exports = {
       const transaction = await Transaction.findOne({ where: { id }, include: [{ model: Category }] });
 
       if (!transaction) {
-        throw new Error(`No transaction with id ${id}`);
+        throw new Error(`No se encontró la transacción!`);
       }
 
       endpointResponse({
         res,
-        message: 'Transaction retrieved successfully',
+        message: 'Transacción recibida correctamente!',
         body: transaction,
       });
 
@@ -124,7 +124,7 @@ module.exports = {
 
       endpointResponse({
         res,
-        message: 'Transaction created successfully',
+        message: 'Transacción creada correctamente!',
         body: transaction,
       });
 
@@ -148,7 +148,7 @@ module.exports = {
 
       endpointResponse({
         res,
-        message: 'Transaction updated successfully',
+        message: 'Transacción actualizada correctamente!',
         body: transaction,
       });
 
@@ -167,11 +167,11 @@ module.exports = {
       const deleted = await Transaction.destroy({ where: { id: id } });
 
       if (!deleted) {
-        throw new Error(`Transaction with id ${id} was already deleted`);
+        throw new Error(`No se pudo borrar la transacción porque no existe!`);
       }
       endpointResponse({
         res,
-        message: `Transaction ${id} deleted successfully`,
+        message: `Transacción borrada correctamente!`,
       });
 
     } catch (error) {

@@ -14,13 +14,13 @@ module.exports = {
       const user = await getByEmail(email);
 
       if(!user){
-        throw new Error("User not found!");
+        throw new Error("Usuario no registrado!");
       }
 
       const validPassword = await isValidPassword(password, user.password);
   
       if(!validPassword) {
-        throw new Error("Invalid credentials!");
+        throw new Error("Credenciales inválidas!");
       }
   
       const token = signToken({
@@ -50,12 +50,12 @@ module.exports = {
       const user = await getByEmail(tokenDecode.email);
 
       if(!user){
-        throw new Error("User not found!");
+        throw new Error("Usuario no encontrado!");
       }
       
       return endpointResponse({
         res,
-        message: 'User find successfully',
+        message: 'Usuario encontrado correctamente!',
         body: user
       })
       

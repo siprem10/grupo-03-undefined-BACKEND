@@ -9,12 +9,12 @@ module.exports = {
       const categories = await Category.findAll({ paranoid: true });
 
       if (!categories || !categories.length) {
-        throw new Error("Categories not found");
+        throw new Error("Categorias no encontradas!");
       }
 
       endpointResponse({
         res,
-        message: 'Categories retrieved successfully',
+        message: 'Categorias recibidas correctamente!',
         body: categories,
       });
 
@@ -30,12 +30,12 @@ module.exports = {
       const category = await Category.findByPk(id, { paranoid: true });
 
       if (!category) {
-        throw new Error(`Category with id ${id} not found`);
+        throw new Error(`Categoria no encontrada!`);
       }
 
       endpointResponse({
         res,
-        message: 'Category retrieved successfully',
+        message: 'Categoria recibida correctamente!',
         body: category,
       });
 
@@ -53,7 +53,7 @@ module.exports = {
 
       endpointResponse({
         res,
-        message: 'Category created successfully',
+        message: 'Categoria creada correctamente!',
         body: category,
       });
 
@@ -72,7 +72,7 @@ module.exports = {
 
       endpointResponse({
         res,
-        message: 'Category updated successfully',
+        message: 'Categorias actualizada correctamente!',
         body: updated,
       });
 
@@ -90,7 +90,7 @@ module.exports = {
 
       endpointResponse({
         res,
-        message: 'Category updated successfully',
+        message: 'Categoria borrada correctamente!',
         body: deleted,
       });
 
