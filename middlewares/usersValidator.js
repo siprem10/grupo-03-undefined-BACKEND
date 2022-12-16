@@ -20,7 +20,7 @@ const isEmailValid = body('email')
     const findUser = await getByEmail(email);
 
     if (findUser) {
-      throw new Error('User already exists!');
+      throw new Error('El usuario ya está registrado!');
     }
   });
 
