@@ -56,6 +56,10 @@ module.exports = {
       if(!user){
         throw new Error("Usuario no encontrado!");
       }
+
+      if(user.deletedAt){
+        throw new Error("Usuario baneado!");
+      }
       
       return endpointResponse({
         res,
