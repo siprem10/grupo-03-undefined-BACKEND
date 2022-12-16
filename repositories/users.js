@@ -26,6 +26,19 @@ const getUser = async (find) => {
 const getAll = async () => {
 
     return await User.findAll({
+        paranoid: false
+    },
+    {
+        attributes: { exclude: ['password'] },
+    });
+}
+
+const getAllexcludeYou = async (id) => {
+
+    return await User.findAll({
+        paranoid: false,
+        where: { id: { [Op.not]: id } }
+    }, {
         attributes: { exclude: ['password'] },
     });
 }
@@ -64,6 +77,7 @@ module.exports = {
     getByEmail,
     getUser,
     getAll,
+    getAllexcludeYou,
     create,
     update,
     updatePassword,

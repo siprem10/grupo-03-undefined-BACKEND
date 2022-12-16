@@ -8,7 +8,11 @@ const bcrypt = require('bcrypt');
 module.exports = {
   getAll: catchAsync(async (req, res, next) => {
     try {
-      const users = await UsersRepository.getAll();
+      const { excludeYou } = req.query;
+      const token = req.header('auth-token');
+      const decodedToken = decodeToken(token);
+
+      const users = excludeYou ? await UsersRepository.getAllexcludeYou(decodedToken.id) : await UsersRepository.getAll();
 
       if (!users || !users.length) {
         throw new Error("No hay usuarios creados!")
