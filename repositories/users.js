@@ -1,6 +1,6 @@
 
 const { Op } = require('sequelize');
-const { User } = require('../database/models');
+const { User, Role } = require('../database/models');
 const CreditCard = require('../utils/creditCard');
 
 const getById = async (id) => {
@@ -10,7 +10,8 @@ const getById = async (id) => {
 const getByEmail = async (email) => {
     return await User.findOne({ 
         paranoid: false,
-        where: { email: email } 
+        where: { email: email },
+        include: [{ model: Role }]
     }, { attributes: { exclude: ['password'] } });
 }
 

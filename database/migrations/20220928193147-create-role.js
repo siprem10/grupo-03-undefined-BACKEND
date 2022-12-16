@@ -11,14 +11,14 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      description: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
+        type: Sequelize.DATE
+      },
+      deletedAt: {
         type: Sequelize.DATE
       }
     });
