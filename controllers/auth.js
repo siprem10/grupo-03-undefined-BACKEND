@@ -17,6 +17,10 @@ module.exports = {
         throw new Error("Usuario no registrado!");
       }
 
+      if(user.deletedAt){
+        throw new Error("Usuario baneado!");
+      }
+
       const validPassword = await isValidPassword(password, user.password);
   
       if(!validPassword) {
