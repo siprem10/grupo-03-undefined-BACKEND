@@ -8,7 +8,10 @@ const getById = async (id) => {
 }
 
 const getByEmail = async (email) => {
-    return await User.findOne({paranoid: false}, { where: { email: email } }, { attributes: { exclude: ['password'] } });
+    return await User.findOne({ 
+        paranoid: false,
+        where: { email: email } 
+    }, { attributes: { exclude: ['password'] } });
 }
 
 const getUser = async (find) => {
