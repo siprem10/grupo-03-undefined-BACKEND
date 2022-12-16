@@ -31,13 +31,11 @@ module.exports = {
       const { excludeYou } = req.query;
       const decodedToken = decodeToken(token);
       const user = await getUser(id);
-
-      if(!user) {
-        throw new Error("Usuario no encontrado!")
-      }
       
-      if(excludeYou && (user.id === decodedToken.id) || user.email === decodedToken.email){
-        throw new Error("Usuario no encontrado!")
+      if(!user ||
+        excludeYou && (user.id === decodedToken.id || user.email === decodedToken.email) ){
+          
+        throw new Error("Usuario no encontrado!");
       }
       
       endpointResponse({
