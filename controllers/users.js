@@ -177,10 +177,12 @@ module.exports = {
         throw new Error("No hay ningún usuario para ser desbaneado con ese id!")
       }
 
+      const userRestore = await UsersRepository.getById(id);
+
       endpointResponse({
         res,
         message: `Usuario desbaneado correctamente!`,
-        body: user,
+        body: userRestore,
       });
 
     } catch (error) {
