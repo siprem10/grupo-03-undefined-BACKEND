@@ -4,11 +4,14 @@ const { User, Role } = require('../database/models');
 const CreditCard = require('../utils/creditCard');
 
 const getById = async (id) => {
-    return await User.findByPk(id, {paranoid: false},  { attributes: { exclude: ['password'] } });
+    return await User.findByPk(id, {
+        paranoid: false,
+        include: [{ model: Role }]
+    }, { attributes: { exclude: ['password'] } });
 }
 
 const getByEmail = async (email) => {
-    return await User.findOne({ 
+    return await User.findOne({
         paranoid: false,
         where: { email: email },
         include: [{ model: Role }]
@@ -32,9 +35,9 @@ const getAll = async () => {
     return await User.findAll({
         paranoid: false
     },
-    {
-        attributes: { exclude: ['password'] },
-    });
+        {
+            attributes: { exclude: ['password'] },
+        });
 }
 
 const getAllexcludeYou = async (id) => {
