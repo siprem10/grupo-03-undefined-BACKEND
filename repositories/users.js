@@ -1,6 +1,7 @@
 
 const { Op } = require('sequelize');
 const { User } = require('../database/models');
+const CreditCard = require('../utils/creditCard');
 
 const getById = async (id) => {
     return await User.findByPk(id, { attributes: { exclude: ['password'] } });
@@ -22,8 +23,26 @@ const getUser = async (find) => {
     }, { attributes: { exclude: ['password'] } });
 };
 
+const getAll = async () => {
+
+    return await User.findAll({
+        attributes: { exclude: ['password'] },
+    });
+};
+
+const create = async (data) => {
+
+    return await User.create({
+        ...data,
+        creditCard: CreditCard.getCardNum(),
+        creditCardExp: CreditCard.getExpiringDate(new Date()),
+    });
+};
+
 module.exports = {
     getById,
     getByEmail,
-    getUser
+    getUser,
+    getAll,
+    create
 }
