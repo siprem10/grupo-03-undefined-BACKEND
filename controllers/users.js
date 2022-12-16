@@ -1,17 +1,16 @@
 const createHttpError = require('http-errors');
-const { User } = require('../database/models');
 const { endpointResponse } = require('../helpers/success');
 const { catchAsync } = require('../helpers/catchAsync');
-const bcrypt = require('bcrypt');
 const { decodeToken } = require('../utils/jwt');
 const UsersRepository = require('../repositories/users');
+const bcrypt = require('bcrypt');
 
 module.exports = {
   getAll: catchAsync(async (req, res, next) => {
     try {
-      const users = UsersRepository.getAll();
+      const users = await UsersRepository.getAll();
 
-      if(!users || !users.length) {
+      if (!users || !users.length) {
         throw new Error("No hay usuarios creados!")
       }
 
@@ -55,6 +54,7 @@ module.exports = {
   createUser: catchAsync(async (req, res, next) => {
     try {
       const { firstName, lastName, email, password } = req.body;
+
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const newUser = await UsersRepository.create({
@@ -64,7 +64,7 @@ module.exports = {
         password: hashedPassword
       });
 
-      if(!newUser || !newUser.length) {
+      if (!newUser) {
         throw new Error("No se pudo registrar el usuario!")
       }
 
@@ -80,29 +80,61 @@ module.exports = {
       next(httpError);
     }
   }),
-  updateUser: catchAsync(async (req, res, next) => {
-    const url = req.protocol + '://' + req.get('host');
+  updateProfile: catchAsync(async (req, res, next) => {
     try {
-      const { firstName, lastName, newPassword } = req.body;
+      const url = req.protocol + '://' + req.get('host');
+      const { firstName, lastName } = req.body;
       const { id } = req.params;
 
-      const response = await UsersRepository.getById(id);
+      const user = await UsersRepository.getById(id);
 
-      const user = {
+      const updated = await UsersRepository.update({
+        id,
         firstName,
         lastName,
-        avatar: req.file
-          ? `${url}/uploads/${req.file.filename}`
-          : response.avatar,
-      };
+        avatar: req.file ? `${url}/uploads/${req.file.filename}` : user.avatar
+      });
 
-      if (newPassword) user.password = await bcrypt.hash(newPassword, 10);
-      response.update(user);
+      if (!updated || !updated.length) {
+        throw new Error("No se pudo actualizar el usuario!");
+      }
+
+      const userUpdated = await UsersRepository.getById(id);
 
       endpointResponse({
         res,
         message: `Usuario actualizado correctamente!`,
-        body: response,
+        body: userUpdated,
+      });
+
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
+  updatePwd: catchAsync(async (req, res, next) => {
+    try {
+      const { password, newPassword } = req.body;
+      const { id } = req.params;
+
+      if (password === newPassword) {
+        throw new Error("La contraseña no puede ser la misma!");
+      }
+      
+      const hashedNewPwd = await bcrypt.hash(newPassword, 10);
+
+      const updated = await UsersRepository.updatePassword(id, hashedNewPwd);
+
+      if (!updated || !updated.length) {
+        throw new Error("No se pudo actualizar la contraseña!");
+      }
+
+      const userUpdated = await UsersRepository.getById(id);
+
+      endpointResponse({
+        res,
+        message: `Contraseña actualizada correctamente!`,
+        body: userUpdated,
       });
 
     } catch (error) {
@@ -113,16 +145,40 @@ module.exports = {
   deleteUser: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = await User.destroy({
-        where: {
-          id: id,
-        },
-      });
+
+      const user = await UsersRepository.destroy(id);
+
+      if (!user) {
+        throw new Error("No hay ningún usuario para ser baneado con ese id!")
+      }
+
       endpointResponse({
         res,
-        message: `Usuario borrado correctamente!`,
-        body: response,
+        message: `Usuario baneado correctamente!`,
+        body: user,
       });
+
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
+  restoreUser: catchAsync(async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const user = await UsersRepository.restore(id);
+
+      if (!user) {
+        throw new Error("No hay ningún usuario para ser desbaneado con ese id!")
+      }
+
+      endpointResponse({
+        res,
+        message: `Usuario desbaneado correctamente!`,
+        body: user,
+      });
+
     } catch (error) {
       const httpError = createHttpError(error.statusCode, error.message);
       next(httpError);

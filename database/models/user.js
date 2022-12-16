@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
   }, {
+    paranoid: true,
     sequelize,
     timestamps: true,
     modelName: 'User',

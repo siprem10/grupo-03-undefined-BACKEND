@@ -4,13 +4,16 @@ const {
   getAll,
   getById,
   createUser,
-  updateUser,
+  updateProfile,
   deleteUser,
+  updatePwd,
+  restoreUser,
 } = require('../controllers/users');
 const validationResultHandler = require('../middlewares/validationResultHandler');
 const {
   postValidator,
-  updateValidator,
+  updateProfileValidator,
+  updatePwdValidator,
 } = require('../middlewares/usersValidator');
 const multer = require('../middlewares/multerConfig');
 
@@ -20,13 +23,22 @@ router.get('/', verifyToken, getAll);
 router.get('/:id', verifyToken, getById);
 router.post('/', postValidator, validationResultHandler, createUser);
 router.put(
-  '/:id',
+  '/profile/:id',
   verifyToken,
   multer,
-  updateValidator,
+  updateProfileValidator,
   validationResultHandler,
-  updateUser
+  updateProfile
+);
+
+router.put(
+  '/changepassword/:id',
+  verifyToken,
+  updatePwdValidator,
+  validationResultHandler,
+  updatePwd
 );
 router.delete('/:id', verifyToken, deleteUser);
+router.post('/:id', verifyToken, restoreUser);
 
 module.exports = router;

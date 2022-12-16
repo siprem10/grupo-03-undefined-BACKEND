@@ -51,6 +51,8 @@ module.exports = {
       deletedAt: {
         type: Sequelize.DATE
       }
+    }, {
+      paranoid: true
     });
   },
 

@@ -1,7 +1,5 @@
-const { body } = require('express-validator');
-const { getByEmail } = require('../repositories/users');
-const db = require('../database/models');
-const { compare } = require('bcrypt');
+const { body, param } = require('express-validator');
+const { getByEmail, getById } = require('../repositories/users');
 
 const isFirstNameValid = body('firstName')
   .notEmpty()
@@ -30,6 +28,22 @@ const isPwdValid = body('password')
   .isLength(8)
   .withMessage('password is short');
 
+
+const isNewPwdValid = body('newPassword')
+  .notEmpty()
+  .withMessage('newPassword required')
+  .isLength(8)
+  .withMessage('newPassword is short');
+
+const isUserExists = param('id')
+  .custom(async (id) => {
+    const findUser = await getById(id);
+
+    if (!findUser) {
+      throw new Error('No se encontró el usuario!');
+    }
+  });
+
 const postValidator = [
   isFirstNameValid,
   isLastNameValid,
@@ -37,45 +51,20 @@ const postValidator = [
   isPwdValid,
 ];
 
-const currentPasswordIncorrect = async (req, res, next) => {
-  const { currentPassword } = req.body;
-  const { id } = req.params;
-  const user = await db.User.findByPk(id);
-
-  const correctPassword = await compare(currentPassword, user.password);
-
-  if (currentPassword && !correctPassword)
-    return res.status(401).send({
-      error:
-        'La contraseña actual es incorrecta, intentelo de nuevo, o recupere su contraseña.',
-    });
-  next();
-};
-
-const emailsExists = async (req, res, next) => {
-  const { id } = req.params;
-  const { email } = req.body;
-  const user = await db.User.findByPk(id);
-
-  const userEmailExists = await db.User.findAll({ where: { email } });
-
-  if (user.email !== email && userEmailExists.length) {
-    return res.status(401).send({
-      error: 'El email ya fue registrado, proporcione otro o inicie sesión.',
-    });
-  }
-
-  next();
-};
-
-const updateValidator = [
+const updateProfileValidator = [
   isFirstNameValid,
   isLastNameValid,
-  emailsExists,
-  currentPasswordIncorrect
+  isUserExists
+];
+
+const updatePwdValidator = [
+  isPwdValid,
+  isNewPwdValid,
+  isUserExists
 ];
 
 module.exports = {
   postValidator,
-  updateValidator,
+  updateProfileValidator,
+  updatePwdValidator,
 };
