@@ -4,7 +4,7 @@ const { User } = require('../database/models');
 const CreditCard = require('../utils/creditCard');
 
 const getById = async (id) => {
-    return await User.findByPk(id, { attributes: { exclude: ['password'] } });
+    return await User.findByPk(id, {paranoid: false},  { attributes: { exclude: ['password'] } });
 }
 
 const getByEmail = async (email) => {

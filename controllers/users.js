@@ -156,10 +156,12 @@ module.exports = {
         throw new Error("No hay ningún usuario para ser baneado con ese id!")
       }
 
+      const userDeleted = await UsersRepository.getById(id);
+
       endpointResponse({
         res,
         message: `Usuario baneado correctamente!`,
-        body: user,
+        body: userDeleted,
       });
 
     } catch (error) {
