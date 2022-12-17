@@ -12,7 +12,7 @@ module.exports = {
           createdAt: new Date()
         },
         {
-          name: 'Standard-User',
+          name: 'Estandar',
           description: 'Puede usar la plataforma.',
           createdAt: new Date()
         },
