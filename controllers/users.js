@@ -4,6 +4,7 @@ const { catchAsync } = require('../helpers/catchAsync');
 const { decodeToken } = require('../utils/jwt');
 const UsersRepository = require('../repositories/users');
 const bcrypt = require('bcrypt');
+const { isPwdEquals } = require('../utils/password');
 
 module.exports = {
   getAll: catchAsync(async (req, res, next) => {
@@ -121,10 +122,18 @@ module.exports = {
       const { password, newPassword } = req.body;
       const { id } = req.params;
 
-      if (password === newPassword) {
-        throw new Error("La contraseña no puede ser la misma!");
+      const user = await UsersRepository.getById(id);
+      const isPwdEquals = await isPwdEquals(password, user.password);
+      const isNewPwdEquals = await isPwdEquals(password, user.password);
+
+      if (!isPwdEquals) {
+        throw new Error("La contraseña antigua no es correcta!");
       }
-      
+
+      if (isNewPwdEquals || (password === newPassword)) {
+        throw new Error("La contraseña nueva no puede ser la misma!");
+      }
+
       const hashedNewPwd = await bcrypt.hash(newPassword, 10);
 
       const updated = await UsersRepository.updatePassword(id, hashedNewPwd);

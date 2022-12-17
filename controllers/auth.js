@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors');
 const { catchAsync } = require('../helpers/catchAsync');
 const { endpointResponse } = require('../helpers/success');
-const { isValidPassword } = require('../utils/password');
+const { isPwdEquals } = require('../utils/password');
 const { signToken, decodeToken } = require('../utils/jwt');
 const { getByEmail } = require('../repositories/users');
 
@@ -21,7 +21,7 @@ module.exports = {
         throw new Error("Usuario baneado!");
       }
 
-      const validPassword = await isValidPassword(password, user.password);
+      const validPassword = await isPwdEquals(password, user.password);
   
       if(!validPassword) {
         throw new Error("Credenciales inválidas!");

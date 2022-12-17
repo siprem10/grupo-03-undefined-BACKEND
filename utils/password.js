@@ -1,9 +1,9 @@
 const bcrypt = require("bcrypt");
 
-const isValidPassword = async (pwd, pwdCompare) => {
-    return await bcrypt.compare(pwd, pwdCompare);
+const isPwdEquals = async (password, pwdHash) => {
+    return await bcrypt.compare(password, pwdHash);
 }
 
 module.exports = {
-    isValidPassword
+    isPwdEquals
 }
