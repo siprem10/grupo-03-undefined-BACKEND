@@ -22,8 +22,8 @@ module.exports = {
           ]
         }, include: [
           { model: Category },
-          { model: User, as: "user", attributes: { exclude: ['password'] } },
-          { model: User, as: "toUser", attributes: { exclude: ['password'] } },
+          { model: User, as: "user", paranoid: false, attributes: { exclude: ['password'] } },
+          { model: User, as: "toUser", paranoid: false, attributes: { exclude: ['password'] } },
         ]
       });
 
