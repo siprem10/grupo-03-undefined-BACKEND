@@ -22,7 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: DataTypes.STRING,
     avatar: DataTypes.STRING,
-    roleId: DataTypes.INTEGER,
+    roleId: {
+      type: DataTypes.INTEGER,
+      defaultValue: 2,
+      allowNull: false
+    },
     creditCard: {
       type: DataTypes.STRING,
       allowNull: false
