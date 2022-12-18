@@ -59,8 +59,8 @@ const create = async (data) => {
     });
 }
 
-const update = async (data) => {
-    return await User.update(data, { where: { id: data.id } });
+const update = async (id, data) => {
+    return await User.update(data, { where: { id } });
 }
 
 const updatePassword = async (id, newPassword) => {

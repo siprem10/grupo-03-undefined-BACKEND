@@ -87,17 +87,12 @@ module.exports = {
   }),
   updateProfile: catchAsync(async (req, res, next) => {
     try {
-      const url = req.protocol + '://' + req.get('host');
       const { firstName, lastName } = req.body;
       const { id } = req.params;
 
-      const user = await UsersRepository.getById(id);
-
-      const updated = await UsersRepository.update({
-        id,
+      const updated = await UsersRepository.update(id, {
         firstName,
-        lastName,
-        avatar: req.file ? `${url}/uploads/${req.file.filename}` : user.avatar
+        lastName
       });
 
       if (!updated || !updated.length) {
@@ -109,6 +104,42 @@ module.exports = {
       endpointResponse({
         res,
         message: `Usuario actualizado correctamente!`,
+        body: userUpdated,
+      });
+
+    } catch (error) {
+      const httpError = createHttpError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
+  updateImage: catchAsync(async (req, res, next) => {
+    try {
+      const url = req.protocol + '://' + req.get('host');
+      const { id } = req.params;
+      const file = req.file;
+      const fileSubmited = `${url}/uploads/${file.filename}`;
+
+      if(!file) {
+        throw new Error("Debes proporcionar una imagen!");
+      }   
+
+      if(!fileSubmited) {
+        throw new Error("Error al cambiar la imagen!");
+      }
+
+      const updated = await UsersRepository.update(id, {
+        avatar: fileSubmited
+      });
+
+      if (!updated || !updated.length) {
+        throw new Error("No se pudo actualizar la imagen!");
+      }
+
+      const userUpdated = await UsersRepository.getById(id);
+
+      endpointResponse({
+        res,
+        message: `Imagen actualizada correctamente!`,
         body: userUpdated,
       });
 

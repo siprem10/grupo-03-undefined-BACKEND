@@ -5,8 +5,9 @@ const {
   getById,
   createUser,
   updateProfile,
-  deleteUser,
+  updateImage,
   updatePwd,
+  deleteUser,
   restoreUser,
 } = require('../controllers/users');
 const validationResultHandler = require('../middlewares/validationResultHandler');
@@ -25,10 +26,17 @@ router.post('/', postValidator, validationResultHandler, createUser);
 router.put(
   '/profile/:id',
   verifyToken,
-  multer,
   updateProfileValidator,
   validationResultHandler,
   updateProfile
+);
+
+
+router.put(
+  '/changeimage/:id',
+  verifyToken,
+  multer,
+  updateImage
 );
 
 router.put(
